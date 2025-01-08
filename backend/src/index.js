@@ -1,0 +1,63 @@
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
+const { ExpressPeerServer } = require("peer");
+const path = require("path");
+
+// Import custom modules
+const { router: roomRoutes } = require("./controllers/roomController");
+const socketHandler = require("./sockets/socketHandler");
+const { configurePeerServer } = require("./config/peerServer");
+
+const app = express();
+const server = http.createServer(app);
+
+// Initialize PeerJS on a separate server
+const peerApp = express();
+const peerServer = http.createServer(peerApp);
+const peerJsInstance = ExpressPeerServer(peerServer, { debug: true });
+peerApp.use("/peerjs", peerJsInstance);
+configurePeerServer(peerJsInstance);
+
+// Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Frontend URL
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "../public")));
+
+// Routes
+app.use("/api/rooms", roomRoutes);
+
+// Initialize Socket.io
+const io = new Server(server, {
+  allowEIO3: true,
+  cors: {
+    origin: "http://localhost:5173",
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`Socket connected: ${socket.id}`);
+  socketHandler(io, socket);
+  socket.on("disconnect", (reason) => {
+    console.log(`Client disconnected: ${socket.id}, Reason: ${reason}`);
+  });
+});
+
+// Start the servers
+const PORT = process.env.PORT || 5000;
+const PEER_PORT = process.env.PEER_PORT || 5001;
+
+server.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+peerServer.listen(PEER_PORT, () => {
+  console.log(`PeerJS Server running on http://localhost:${PEER_PORT}`);
+});
