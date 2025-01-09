@@ -72,7 +72,7 @@ const Room = () => {
       </div>
 
       <div className="mt-4 flex justify-center gap-4">
-        <Buttons />
+        <Buttons roomId={roomId} />
       </div>
     </div>
   );
