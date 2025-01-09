@@ -13,6 +13,13 @@ module.exports = (io, socket) => {
 
     // Add user to the room
     const room = rooms.get(roomId);
+
+    // Ensure the user is not already in the room
+    if (room.users.find((user) => user.name === userName)) {
+      console.log(`${userName} is already in the room`);
+      return; // Don't add user again
+    }
+
     room.users.push({ id: socket.id, name: userName });
     rooms.set(roomId, room);
 
@@ -25,16 +32,27 @@ module.exports = (io, socket) => {
     // Handle user disconnection
     socket.on("disconnect", () => {
       console.log(`${userName} disconnected from room: ${roomId}`);
+      const room = rooms.get(roomId);
+      if (room) {
+        room.users = room.users.filter((user) => user.id !== socket.id);
+        if (room.users.length === 0) {
+          rooms.delete(roomId); // Delete empty room
+        } else {
+          io.to(roomId).emit("room-data", room.users); // Update user list
+        }
+      }
+    });
 
-      // Remove the user from the room
-      const updatedRoom = rooms.get(roomId);
-      updatedRoom.users = updatedRoom.users.filter(
-        (user) => user.id !== socket.id
-      );
-      rooms.set(roomId, updatedRoom);
+    socket.on("send-message", ({ roomId, message, sender }) => {
+      if (rooms.has(roomId)) {
+        const timestamp = new Date().toISOString();
+        const messageData = { sender, message, timestamp };
 
-      // Notify remaining users
-      io.to(roomId).emit("room-data", updatedRoom.users);
+        console.log(`Message from ${sender} in room ${roomId}: ${message}`);
+
+        // Broadcast the message to all users in the room
+        io.to(roomId).emit("receive-message", messageData);
+      }
     });
   });
 };
