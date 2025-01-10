@@ -46,18 +46,10 @@ const Chat = ({ roomId, name }) => {
 
   return (
     <div className="flex flex-col h-full p-4">
-      {/* <div className="flex-1 overflow-y-auto mb-4 border rounded">
-        {messages.map((msg, index) => (
-          <div key={index} className="p-2">
-            <strong>{msg.sender}: </strong>
-            <span>{msg.message}</span>
-            <span className="text-gray-400 text-sm ml-2">
-              {new Date(msg.timestamp).toLocaleTimeString()}
-            </span>
-          </div>
-        ))}
-      </div> */}
-      <div className="flex-1 overflow-y-auto mb-4 space-y-2">
+      <div
+        className="flex-1 overflow-y-auto mb-4 space-y-2 border rounded"
+        style={{ maxHeight: "300px" }} // Adjust the height as needed
+      >
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -98,10 +90,6 @@ const Chat = ({ roomId, name }) => {
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyPress={(e) => handleKeyPress(e)}
           className="flex-1 border p-2 rounded mr-2"
-          // style={{
-          //   borderRadius: "25px",
-          //   padding: "10px 15px",
-          // }}
         />
         <button
           onClick={sendMessage}
