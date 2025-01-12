@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import Editor from "../components/Editor";
+import CodeEditor from "../components/CodeEditor";
 import Chat from "../components/Chat";
 import VideoCall from "../components/VideoCall";
 import Buttons from "../components/Buttons";
@@ -33,24 +33,24 @@ const Room = () => {
   }, [socket, roomId, name]);
 
   return (
-    <div className="h-screen w-full p-4 bg-gray-100 flex flex-col overflow-hidden">
+    <div className="h-screen w-full p-4 bg-gray-100 flex flex-col overflow-auto">
+      {" "}
+      {/* Added overflow-auto here */}
       {/* Project Name */}
       <div className="text-center mb-2 border-b-2 border-gray-800 pb-2">
         <h1 className="text-3xl font-bold">Code-2-Share</h1>
       </div>
-
       {/* User List */}
       <div className="flex justify-center mb-2 border-b-2 border-gray-800 pb-2">
         <UserList users={users} />
       </div>
-
       {/* Main Layout */}
       <div className="flex-grow flex flex-col">
         {/* Upper Section: Code Editor and Chat */}
         <div className="flex flex-grow gap-2">
           {/* Code Editor */}
           <div className="flex-[6] border-4 border-gray-700 p-2 overflow-auto">
-            <Editor />
+            <CodeEditor roomId={roomId} />
           </div>
 
           {/* Chat Component */}

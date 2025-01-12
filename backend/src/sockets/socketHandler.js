@@ -29,6 +29,13 @@ module.exports = (io, socket) => {
     // Notify all users in the room about the new user
     io.to(roomId).emit("room-data", room.users);
 
+    socket.on("editor-change", ({ roomId, newContent }) => {
+      if (roomId) {
+        console.log("Broadcasting editor change to room:", roomId);
+        io.to(roomId).emit("update-editor", { newContent });
+      }
+    });
+
     // Handle user disconnection
     socket.on("disconnect", () => {
       console.log(`${userName} disconnected from room: ${roomId}`);

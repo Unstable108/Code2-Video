@@ -1,5 +1,5 @@
 import React from "react";
-import Editor from "../components/Editor";
+import CodeEditor from "../components/CodeEditor";
 import Chat from "../components/Chat";
 import VideoCall from "../components/VideoCall";
 import Buttons from "../components/Buttons";
@@ -23,7 +23,7 @@ const RoomTest = ({ roomId, name }) => {
         <div className="flex flex-grow gap-2">
           {/* Code Editor (6x7) */}
           <div className="flex-[6] border-4 border-gray-700 p-2 overflow-auto">
-            <Editor />
+            <CodeEditor />
           </div>
 
           {/* Chat Component (4x7) */}
