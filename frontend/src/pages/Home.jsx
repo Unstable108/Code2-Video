@@ -6,7 +6,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [roomId, setRoomId] = useState("");
-  const [isHost, setIsHost] = useState(false);
+  const [isHost, setIsHost] = useState(true); // Default to 'Host a Meeting'
 
   const handleHostRoom = async () => {
     if (name.trim()) {
@@ -34,8 +34,8 @@ const Home = () => {
       <div className="flex flex-col items-center mb-6">
         <button
           onClick={() => setIsHost(true)}
-          className={`bg-blue-500 text-white px-6 py-2 rounded mb-4 ${
-            isHost ? "bg-blue-600" : ""
+          className={`bg-green-500 text-white px-6 py-2 rounded mb-4 ${
+            isHost ? "bg-green-600" : ""
           }`}
         >
           Host a Meeting
@@ -61,7 +61,7 @@ const Home = () => {
           />
           <button
             onClick={handleHostRoom}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+            className="bg-green-500 text-white px-6 py-2 rounded hover:bg-blue-600"
           >
             Host Room
           </button>
