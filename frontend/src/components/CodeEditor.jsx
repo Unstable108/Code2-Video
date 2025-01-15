@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useSocket } from "../context/socketContext";
-import Editor from "@monaco-editor/react";
+import Editor, { useMonaco } from "@monaco-editor/react";
+import { debounce } from "lodash";
 
 const CodeEditor = ({ roomId }) => {
   const [code, setCode] = useState("// Write your code here...");
@@ -8,7 +10,7 @@ const CodeEditor = ({ roomId }) => {
 
   useEffect(() => {
     if (socket) {
-      // Listen for content updates from other users in the room
+      // Listen for content updates from other users
       const handleEditorUpdate = ({ newContent }) => {
         setCode(newContent);
       };
@@ -21,13 +23,12 @@ const CodeEditor = ({ roomId }) => {
     }
   }, [socket]);
 
-  const handleEditorChange = (value) => {
+  const handleEditorChange = debounce((value) => {
     setCode(value);
-
     if (socket && roomId) {
       socket.emit("editor-change", { roomId, newContent: value });
     }
-  };
+  }, 500);
 
   return (
     <div className="h-full p-4">
@@ -44,6 +45,10 @@ const CodeEditor = ({ roomId }) => {
       />
     </div>
   );
+};
+
+CodeEditor.propTypes = {
+  roomId: PropTypes.string.isRequired,
 };
 
 export default CodeEditor;

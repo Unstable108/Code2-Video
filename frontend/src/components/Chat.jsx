@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 import { useSocket } from "../context/socketContext";
 
 const Chat = ({ roomId, name }) => {
@@ -103,6 +104,10 @@ const Chat = ({ roomId, name }) => {
       </div>
     </div>
   );
+};
+Chat.propTypes = {
+  roomId: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default Chat;
