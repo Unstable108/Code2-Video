@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSocket } from "../context/socketContext";
-import Editor, { useMonaco } from "@monaco-editor/react";
+import Editor from "@monaco-editor/react";
 import { debounce } from "lodash";
 
 const CodeEditor = ({ roomId }) => {
