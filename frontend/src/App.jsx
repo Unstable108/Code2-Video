@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Room from "./pages/Room";
 import "./index.css";
 import RoomTest from "./pages/RoomTest";
+import RoomNew from "./pages/RoomNew";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/room/:id" element={<Room />} />
             <Route path="/roomtest" element={<RoomTest />} />
+            <Route path="/newroom" element={<RoomNew />} />
           </Routes>
         </div>
       </Router>
