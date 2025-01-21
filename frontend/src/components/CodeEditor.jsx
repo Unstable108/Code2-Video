@@ -31,16 +31,17 @@ const CodeEditor = ({ roomId }) => {
   }, 500);
 
   return (
-    <div className="h-full p-4">
+    <div className="h-full w-full shadow-xl overflow-hidden">
       <Editor
-        height="calc(100vh - 40px)"
+        height="100%" // Ensure editor takes 100% of its allocated height
+        width="100%" // Ensure the editor takes the full width of its parent container
         defaultLanguage="javascript"
         value={code}
         onChange={handleEditorChange}
         theme="vs-dark"
         options={{
           selectOnLineNumbers: true,
-          automaticLayout: true,
+          automaticLayout: true, // Automatically adjust layout
         }}
       />
     </div>

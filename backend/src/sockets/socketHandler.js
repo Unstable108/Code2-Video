@@ -36,11 +36,46 @@ module.exports = (io, socket) => {
       }
     });
 
+    // Video call: Join video session in the room
+    socket.on("join-video", ({ roomId, peerId }) => {
+      const room = rooms.get(roomId);
+      if (!room) return;
+
+      // Notify existing peers about the new peer
+      room.users.forEach((user) => {
+        if (user.peerId && user.peerId !== peerId) {
+          io.to(user.id).emit("new-peer", { peerId });
+        }
+      });
+
+      // Track the peerId for the user
+      const user = room.users.find((user) => user.id === socket.id);
+      if (user) user.peerId = peerId;
+
+      // Notify the new peer about all existing peers
+      const existingPeers = room.users
+        .filter((user) => user.peerId && user.peerId !== peerId)
+        .map((user) => user.peerId);
+
+      socket.emit("existing-peers", { existingPeers });
+    });
+
     // Handle user disconnection
     socket.on("disconnect", () => {
       console.log(`${userName} disconnected from room: ${roomId}`);
       const room = rooms.get(roomId);
       if (room) {
+        // Notify other users about the disconnection
+        const disconnectedUser = room.users.find(
+          (user) => user.id === socket.id
+        );
+        if (disconnectedUser && disconnectedUser.peerId) {
+          io.to(roomId).emit("peer-disconnected", {
+            peerId: disconnectedUser.peerId,
+          });
+        }
+
+        // Remove user from the room
         room.users = room.users.filter((user) => user.id !== socket.id);
         if (room.users.length === 0) {
           rooms.delete(roomId); // Delete empty room

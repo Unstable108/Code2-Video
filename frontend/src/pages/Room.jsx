@@ -27,6 +27,7 @@ const Room = () => {
 
       return () => {
         socket.off("room-data", handleRoomData);
+        socket.off("new-peer"); // Ensure all listeners are removed
         socket.removeAllListeners();
       };
     }
