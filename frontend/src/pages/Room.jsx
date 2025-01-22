@@ -68,8 +68,8 @@ const Room = () => {
           </div>
 
           {/* Video Component */}
-          <div className="flex-grow border-4 border-gray-700 p-2 overflow-auto flex items-center justify-center">
-            <VideoCall />
+          <div className="flex-grow border-4 border-gray-700 p-2 overflow-auto">
+            <VideoCall users={users} />
           </div>
         </div>
       </div>

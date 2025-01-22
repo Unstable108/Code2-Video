@@ -3,13 +3,14 @@ import { useSocket } from "../context/socketContext";
 import { useParams } from "react-router-dom";
 import Peer from "peerjs";
 
-const VideoCall = () => {
+const VideoCall = ({ users }) => {
   const { socket } = useSocket();
   const { id: roomId } = useParams();
   const localVideoRef = useRef(null);
   const remoteVideosRef = useRef(null);
   const peerInstance = useRef(null);
   const peers = useRef({}); // Store active peer connections
+  const userNames = useRef({}); // Map peer IDs to user names
 
   useEffect(() => {
     const initializePeerAndMedia = async () => {
@@ -54,11 +55,12 @@ const VideoCall = () => {
         }
 
         // Listen for new peers
-        socket.on("new-peer", ({ peerId }) => {
+        socket.on("new-peer", ({ peerId, userName }) => {
           if (peers.current[peerId]) return; // Avoid duplicate calls
+          userNames.current[peerId] = userName;
           const call = peerInstance.current.call(peerId, localStream);
           call.on("stream", (remoteStream) => {
-            addRemoteStream(peerId, remoteStream);
+            addRemoteStream(peerId, remoteStream, userName);
           });
 
           call.on("close", () => {
@@ -70,11 +72,12 @@ const VideoCall = () => {
 
         // Handle existing peers
         socket.on("existing-peers", ({ existingPeers }) => {
-          existingPeers.forEach((peerId) => {
+          existingPeers.forEach(({ peerId, userName }) => {
             if (peers.current[peerId]) return;
+            userNames.current[peerId] = userName;
             const call = peerInstance.current.call(peerId, localStream);
             call.on("stream", (remoteStream) => {
-              addRemoteStream(peerId, remoteStream);
+              addRemoteStream(peerId, remoteStream, userName);
             });
 
             call.on("close", () => {
@@ -94,18 +97,30 @@ const VideoCall = () => {
       }
     };
 
-    const addRemoteStream = (peerId, remoteStream) => {
+    const addRemoteStream = (peerId, remoteStream, userName) => {
       const existingVideo = remoteVideosRef.current.querySelector(
         `[data-peer-id="${peerId}"]`
       );
       if (existingVideo) return; // Prevent duplicate video elements
 
+      const container = document.createElement("div");
+      container.className = "video-container flex flex-col items-center m-2";
+      container.dataset.peerId = peerId;
+
       const videoElement = document.createElement("video");
       videoElement.srcObject = remoteStream;
       videoElement.autoplay = true;
-      videoElement.dataset.peerId = peerId;
-      videoElement.className = "remote-video w-32 h-32 m-2";
-      remoteVideosRef.current.appendChild(videoElement);
+      videoElement.className =
+        "remote-video w-48 h-48 border-2 border-gray-400 rounded-lg";
+
+      const nameElement = document.createElement("span");
+      nameElement.className = "text-sm mt-1 text-center";
+      nameElement.textContent = userName || `User ${peerId}`;
+
+      container.appendChild(videoElement);
+      container.appendChild(nameElement);
+
+      remoteVideosRef.current.appendChild(container);
     };
 
     const removeRemoteStream = (peerId) => {
@@ -116,6 +131,7 @@ const VideoCall = () => {
         videoElement.remove();
       }
       delete peers.current[peerId];
+      delete userNames.current[peerId];
     };
 
     const cleanup = () => {
@@ -150,16 +166,19 @@ const VideoCall = () => {
   }, [socket, roomId]);
 
   return (
-    <div className="video-call-container">
-      <div className="local-video-container">
-        <video
-          ref={localVideoRef}
-          className="w-48 h-48 border-4 border-blue-500"
-        />
+    <div className="video-call-container overflow-x-auto whitespace-nowrap flex items-start">
+      <div className="local-video-container flex-shrink-0">
+        <div className="video-container flex flex-col items-center m-2">
+          <video
+            ref={localVideoRef}
+            className="w-48 h-48 border-2 border-gray-400 rounded-lg"
+          />
+          <span className="text-sm mt-1 text-center">You</span>
+        </div>
       </div>
       <div
         ref={(el) => (remoteVideosRef.current = el)}
-        className="remote-videos flex flex-wrap"
+        className="remote-videos flex items-start"
       ></div>
     </div>
   );

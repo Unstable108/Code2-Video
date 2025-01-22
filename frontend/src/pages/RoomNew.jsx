@@ -28,6 +28,7 @@ const RoomNew = () => {
 
       return () => {
         socket.off("room-data", handleRoomData);
+        socket.off("new-peer"); // Ensure all listeners are removed
         socket.removeAllListeners();
       };
     }
@@ -67,7 +68,7 @@ const RoomNew = () => {
       {/* Footer Section */}
       <footer className="grid grid-cols-1 sm:grid-cols-12 gap-2 p-2 h-44 flex-shrink-0">
         {/* Buttons */}
-        <div className="absolute bottom-0 left-0 rounded bg-orange-500 shadow-xl sm:col-span-1 flex items-center justify-center">
+        <div className=" rounded bg-orange-500 shadow-xl sm:col-span-1 flex items-center justify-center">
           <Buttons roomId={roomId} />
         </div>
 
