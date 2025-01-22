@@ -23,7 +23,8 @@ configurePeerServer(peerJsInstance);
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // Frontend URL
+    origin: "https://code2-video.vercel.app/", // Frontend URL (vercel deployment)
+    // origin: "http://localhost:5173", // Frontend URL (localhost)
     credentials: true,
   })
 );
@@ -37,7 +38,8 @@ app.use("/api/rooms", roomRoutes);
 const io = new Server(server, {
   allowEIO3: true,
   cors: {
-    origin: "http://localhost:5173",
+   origin: "https://code2-video.vercel.app/", // Frontend URL (vercel deployment)
+  // origin: "http://localhost:5173", // Frontend URL (localhost)
     credentials: true,
   },
 });
