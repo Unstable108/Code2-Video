@@ -57,9 +57,12 @@ const PORT = process.env.PORT || 5000;
 const PEER_PORT = process.env.PEER_PORT || 5001;
 
 server.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  const host = process.env.HOST || "0.0.0.0"; // Use HOST if set, otherwise default
+  const environmentUrl = process.env.RAILWAY_STATIC_URL || `http://localhost:${PORT}`;
+  console.log(`Server running on ${environmentUrl}`);
 });
 
 peerServer.listen(PEER_PORT, () => {
-  console.log(`PeerJS Server running on http://localhost:${PEER_PORT}`);
+  const peerUrl = `http://localhost:${PEER_PORT}`;
+  console.log(`PeerJS Server running on ${peerUrl}`);
 });
