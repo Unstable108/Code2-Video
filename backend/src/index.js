@@ -23,14 +23,10 @@ configurePeerServer(peerJsInstance);
 // Middleware
 app.use(
   cors({
-    origin: [
-      "https://code2-video.vercel.app", // Frontend on Vercel
-      "http://localhost:5173", // Frontend for local testing
-    ],
+    origin: "http://localhost:5173", // Frontend URL
     credentials: true,
   })
 );
-
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 
@@ -39,15 +35,12 @@ app.use("/api/rooms", roomRoutes);
 
 // Initialize Socket.io
 const io = new Server(server, {
+  allowEIO3: true,
   cors: {
-    origin: [
-      "https://code2-video.vercel.app", // Frontend on Vercel
-      "http://localhost:5173", // Local testing
-    ],
+    origin: "http://localhost:5173",
     credentials: true,
   },
 });
-
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
@@ -61,9 +54,11 @@ io.on("connection", (socket) => {
 const PORT = process.env.PORT || 5000;
 const PEER_PORT = process.env.PEER_PORT || 5001;
 
+
 server.listen(PORT, () => {
   const host = process.env.HOST || "0.0.0.0"; // Use HOST if set, otherwise default
-  const environmentUrl = process.env.RAILWAY_STATIC_URL || `http://localhost:${PORT}`;
+  const environmentUrl =
+    process.env.RAILWAY_STATIC_URL || `http://localhost:${PORT}`;
   console.log(`Server running on ${environmentUrl}`);
 });
 
