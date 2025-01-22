@@ -39,13 +39,15 @@ app.use("/api/rooms", roomRoutes);
 
 // Initialize Socket.io
 const io = new Server(server, {
-  allowEIO3: true,
   cors: {
-   origin: "https://code2-video.vercel.app/", // Frontend URL (vercel deployment)
-  // origin: "http://localhost:5173", // Frontend URL (localhost)
+    origin: [
+      "https://code2-video.vercel.app", // Frontend on Vercel
+      "http://localhost:5173", // Local testing
+    ],
     credentials: true,
   },
 });
+
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
