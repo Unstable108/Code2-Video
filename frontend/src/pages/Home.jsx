@@ -13,7 +13,7 @@ const Home = () => {
       try {
         const response = await axios.post(
           //live-link part
-          "https://code2-video-production.up.railway.app//api/rooms/create"
+          "https://code2-video-production.up.railway.app/api/rooms/create"
           //localhost part
           // "http://localhost:5000/api/rooms/create"
         );
