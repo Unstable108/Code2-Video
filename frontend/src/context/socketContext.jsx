@@ -9,7 +9,11 @@ let socket;
 export const SocketProvider = ({ children }) => {
   if (!socket) {
     console.log("Creating a new socket connection...");
-    socket = io("http://localhost:5000", { withCredentials: true });
+    
+    //live-part
+    socket = io("https://code2-video-production.up.railway.app", { withCredentials: true });
+    //localhost-part
+    // socket = io("http://localhost:5000", { withCredentials: true });
   }
 
   return (
