@@ -23,11 +23,14 @@ configurePeerServer(peerJsInstance);
 // Middleware
 app.use(
   cors({
-    origin: "https://code2-video.vercel.app/", // Frontend URL (vercel deployment)
-    // origin: "http://localhost:5173", // Frontend URL (localhost)
+    origin: [
+      "https://code2-video.vercel.app", // Frontend on Vercel
+      "http://localhost:5173", // Frontend for local testing
+    ],
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 
