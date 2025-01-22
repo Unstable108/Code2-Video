@@ -12,7 +12,10 @@ const Home = () => {
     if (name.trim()) {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/rooms/create"
+          //live-link part
+          "https://code2-video-production.up.railway.app//api/rooms/create"
+          //localhost part
+          // "http://localhost:5000/api/rooms/create"
         );
         const newRoomId = response.data.roomId;
         navigate(`/room/${newRoomId}`, { state: { name, isHost: true } });
