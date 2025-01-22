@@ -32,9 +32,17 @@ const VideoCall = ({ users }) => {
         // Initialize PeerJS
         if (!peerInstance.current) {
           peerInstance.current = new Peer(undefined, {
-            host: "localhost",
-            port: 5001,
+            
+            //live-part
+            host: "code2-video-production.up.railway.app",
+            port: 443, // Use 443 for HTTPS
             path: "/peerjs",
+            secure: true, // Enable HTTPS
+
+            //localhost-part
+            // host: "localhost",
+            // port: 5001,
+            // path: "/peerjs",
           });
 
           peerInstance.current.on("open", (peerId) => {
