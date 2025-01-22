@@ -113,12 +113,7 @@ const VideoCall = ({ users }) => {
       videoElement.className =
         "remote-video w-48 h-48 border-2 border-gray-400 rounded-lg";
 
-      const nameElement = document.createElement("span");
-      nameElement.className = "text-sm mt-1 text-center";
-      nameElement.textContent = userName || `User ${peerId}`;
-
       container.appendChild(videoElement);
-      container.appendChild(nameElement);
 
       remoteVideosRef.current.appendChild(container);
     };
@@ -173,7 +168,6 @@ const VideoCall = ({ users }) => {
             ref={localVideoRef}
             className="w-48 h-48 border-2 border-gray-400 rounded-lg"
           />
-          <span className="text-sm mt-1 text-center">You</span>
         </div>
       </div>
       <div

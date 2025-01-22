@@ -29,6 +29,7 @@ module.exports = (io, socket) => {
     // Notify all users in the room about the new user
     io.to(roomId).emit("room-data", room.users);
 
+    //Editor: Handle editor changes
     socket.on("editor-change", ({ roomId, newContent }) => {
       if (roomId) {
         console.log("Broadcasting editor change to room:", roomId);
@@ -85,6 +86,7 @@ module.exports = (io, socket) => {
       }
     });
 
+    // Chat: Handle incoming messages
     socket.on("send-message", ({ roomId, message, sender }) => {
       if (rooms.has(roomId)) {
         const timestamp = new Date().toISOString();

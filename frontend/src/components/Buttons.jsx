@@ -33,7 +33,7 @@ const Buttons = ({ roomId }) => {
   };
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col items-center justify-center h-full gap-4">
       <button className="p-3 bg-blue-500 text-white rounded-md flex items-center space-x-2">
         <Icons.StartCamera className="h-6 w-6" />
         {/* <span>Start Video</span> */}
