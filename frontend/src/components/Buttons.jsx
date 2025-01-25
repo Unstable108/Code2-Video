@@ -5,14 +5,14 @@ import "react-toastify/dist/ReactToastify.css";
 import PropTypes from "prop-types";
 
 const Buttons = ({ roomId }) => {
-  const [showToast, setShowToast] = useState(false);
+  const [isVideoOn, setIsVideoOn] = useState(true);
+  const [isMicOn, setIsMicOn] = useState(true);
 
   const copyToClipboard = () => {
     if (roomId) {
       navigator.clipboard.writeText(roomId).then(
         () => {
-          setShowToast(true);
-          toast.success("RoomLink Copied", {
+          toast.success("Room Link Copied", {
             position: "top-right",
             autoClose: 1000,
             hideProgressBar: false,
@@ -24,7 +24,7 @@ const Buttons = ({ roomId }) => {
         },
         (err) => {
           alert("Failed to copy Room ID.");
-          console.log(err);
+          console.error(err);
         }
       );
     } else {
@@ -34,25 +34,37 @@ const Buttons = ({ roomId }) => {
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-4">
-      <button className="p-3 bg-blue-500 text-white rounded-md flex items-center space-x-2">
-        <Icons.StartCamera className="h-6 w-6" />
-        {/* <span>Start Video</span> */}
+      <button
+        onClick={() => setIsVideoOn(!isVideoOn)}
+        className="p-3 bg-blue-500 text-white rounded-md flex items-center space-x-2 hover:bg-blue-600 transition"
+      >
+        {isVideoOn ? (
+          <Icons.StartVideo className="h-6 w-6" />
+        ) : (
+          <Icons.StopVideo className="h-6 w-6" />
+        )}
       </button>
-      <button className="p-3 bg-red-500 text-white rounded-md flex items-center space-x-2">
-        <Icons.LeaveRoom className="h-6 w-6" />
-        {/* <span>Leave Meeting</span> */}
+      <button
+        onClick={() => setIsMicOn(!isMicOn)}
+        className="p-3 bg-purple-500 text-white rounded-md flex items-center space-x-2 hover:bg-purple-600 transition"
+      >
+        {isMicOn ? (
+          <Icons.Unmute className="h-6 w-6" />
+        ) : (
+          <Icons.Mute className="h-6 w-6" />
+        )}
       </button>
       <button
         onClick={copyToClipboard}
-        className="p-3 bg-green-500 text-white rounded-md flex items-center space-x-2"
+        className="p-3 bg-green-500 text-white rounded-md flex items-center space-x-2 hover:bg-green-600 transition"
       >
         <Icons.CopyRoomId className="h-6 w-6" />
-        {/* <span>Copy Room-ID</span> */}
       </button>
       <ToastContainer />
     </div>
   );
 };
+
 Buttons.propTypes = {
   roomId: PropTypes.string.isRequired,
 };

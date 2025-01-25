@@ -28,7 +28,7 @@ const CodeEditor = ({ roomId }) => {
     if (socket && roomId) {
       socket.emit("editor-change", { roomId, newContent: value });
     }
-  }, 500);
+  }, 1000);
 
   return (
     <div className="h-full w-full shadow-xl overflow-hidden">

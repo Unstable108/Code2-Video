@@ -1,17 +1,21 @@
-// Icons.jsx
+// https://unpkg.com/browse/@heroicons/react@2.2.0/24/outline/
+//https://heroicons.com/outline
+
 import React from "react";
 import {
-  CameraIcon,
-  ClipboardDocumentIcon,
-  ArrowRightOnRectangleIcon,
+  VideoCameraIcon,
   VideoCameraSlashIcon,
+  MicrophoneIcon,
+  ClipboardDocumentIcon,
+  SpeakerXMarkIcon,
 } from "@heroicons/react/24/solid";
 
 const Icons = {
-  StartCamera: (props) => <CameraIcon {...props} />,
-  StopCamera: (props) => <VideoCameraSlashIcon {...props} />,
+  StartVideo: (props) => <VideoCameraIcon {...props} />,
+  StopVideo: (props) => <VideoCameraSlashIcon {...props} />,
+  Unmute: (props) => <MicrophoneIcon {...props} />,
+  Mute: (props) => <SpeakerXMarkIcon {...props} />,
   CopyRoomId: (props) => <ClipboardDocumentIcon {...props} />,
-  LeaveRoom: (props) => <ArrowRightOnRectangleIcon {...props} />,
 };
 
 export default Icons;
