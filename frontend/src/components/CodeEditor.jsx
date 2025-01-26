@@ -15,6 +15,7 @@ const CodeEditor = ({ roomId }) => {
         setCode(newContent);
       };
 
+      // When joining, get the initial code for the room
       socket.on("update-editor", handleEditorUpdate);
 
       return () => {

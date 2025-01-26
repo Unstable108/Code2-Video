@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [roomId, setRoomId] = useState("");
   const [isHost, setIsHost] = useState(true); // Default to 'Host a Meeting'
+  const [loading, setLoading] = useState(false);
 
   const handleHostRoom = async () => {
     if (name.trim()) {
@@ -22,9 +25,28 @@ const Home = () => {
     }
   };
 
-  const handleJoinRoom = () => {
+  const handleJoinRoom = async () => {
     if (name.trim() && roomId.trim()) {
-      navigate(`/room/${roomId}`, { state: { name, isHost: false } });
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/rooms/${roomId}`
+        );
+        if (response.status === 200) {
+          navigate(`/room/${roomId}`, { state: { name, isHost: false } });
+        }
+      } catch (error) {
+        console.error("Error joining room:", error);
+        if (error.response && error.response.status === 404) {
+          toast.error("Room not found");
+        } else {
+          toast.error("An error occurred.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      toast.warn("enter name and Room ID.");
     }
   };
 
@@ -85,11 +107,24 @@ const Home = () => {
           <button
             onClick={handleJoinRoom}
             className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+            disabled={loading}
           >
-            Join Room
+            {loading ? "Joining..." : "Join Room"}
           </button>
         </div>
       )}
+      <ToastContainer
+        position="top-center"
+        autoClose={1200}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 };

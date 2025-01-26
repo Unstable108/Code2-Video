@@ -29,10 +29,15 @@ module.exports = (io, socket) => {
     // Notify all users in the room about the new user
     io.to(roomId).emit("room-data", room.users);
 
+    // Send current code to the new user
+    socket.emit("update-editor", { newContent: room.code });
+
     //Editor: Handle editor changes
     socket.on("editor-change", ({ roomId, newContent }) => {
       if (roomId) {
         console.log("Broadcasting editor change to room:", roomId);
+        // Update room code in backend
+        room.code = newContent;
         io.to(roomId).emit("update-editor", { newContent });
       }
     });
