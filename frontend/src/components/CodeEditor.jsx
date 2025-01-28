@@ -4,7 +4,7 @@ import { useSocket } from "../context/socketContext";
 import Editor from "@monaco-editor/react";
 import { debounce } from "lodash";
 
-const CodeEditor = ({ roomId }) => {
+const CodeEditor = ({ roomId, onCodeChange }) => {
   const [code, setCode] = useState("// Write your code here...");
   const { socket } = useSocket();
 
@@ -26,6 +26,7 @@ const CodeEditor = ({ roomId }) => {
 
   const handleEditorChange = debounce((value) => {
     setCode(value);
+    onCodeChange(value); // Notify parent about code changes
     if (socket && roomId) {
       socket.emit("editor-change", { roomId, newContent: value });
     }

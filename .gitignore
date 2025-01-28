@@ -7,3 +7,6 @@ backend/node_modules/
 *.log
 *.env
 .DS_Store
+
+# Ignore .env in the backend folder
+backend/.env

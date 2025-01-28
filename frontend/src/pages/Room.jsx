@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
+import Compiler from "../components/Compiler";
 import Chat from "../components/Chat";
 import VideoCall from "../components/VideoCall";
 import Buttons from "../components/Buttons";
@@ -13,6 +14,7 @@ const Room = () => {
   const location = useLocation();
   const { name } = location.state || {};
   const [users, setUsers] = useState([]);
+  const [code, setCode] = useState(""); // Shared code state
   const { socket } = useSocket();
 
   useEffect(() => {
@@ -35,8 +37,6 @@ const Room = () => {
 
   return (
     <div className="h-screen w-full p-4 bg-gray-100 flex flex-col overflow-auto">
-      {" "}
-      {/* Added overflow-auto here */}
       {/* Project Name */}
       <div className="text-center mb-2 border-b-2 border-gray-800 pb-2">
         <h1 className="text-3xl font-bold">Code-2-Share</h1>
@@ -50,13 +50,16 @@ const Room = () => {
         {/* Upper Section: Code Editor and Chat */}
         <div className="flex flex-grow gap-2">
           {/* Code Editor */}
-          <div className="flex-[6] border-4 border-gray-700 p-2 overflow-auto">
-            <CodeEditor roomId={roomId} />
+          <div className="flex-[6] border-4 border-gray-700 p-2 overflow-hidden">
+            <div className="h-full flex flex-col">
+              <CodeEditor roomId={roomId} onCodeChange={setCode} />
+            </div>
           </div>
 
           {/* Chat Component */}
-          <div className="flex-[4] border-4 border-gray-700 p-2 overflow-auto">
+          <div className="flex-[4] border-4 border-gray-700 p-2 overflow-hidden">
             <Chat roomId={roomId} name={name} />
+            {/* <Compiler code={code} /> */}
           </div>
         </div>
 

@@ -4,9 +4,11 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const { ExpressPeerServer } = require("peer");
 const path = require("path");
+require("dotenv").config();
 
 // Import custom modules
 const { router: roomRoutes } = require("./controllers/roomController");
+const compileRouter = require("./controllers/compilerController");
 const socketHandler = require("./sockets/socketHandler");
 const { configurePeerServer } = require("./config/peerServer");
 
@@ -32,6 +34,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 // Routes
 app.use("/api/rooms", roomRoutes);
+app.use("/api/compile", compileRouter);
 
 // Initialize Socket.io
 const io = new Server(server, {
@@ -53,7 +56,6 @@ io.on("connection", (socket) => {
 // Start the servers
 const PORT = process.env.PORT || 5000;
 const PEER_PORT = process.env.PEER_PORT || 5001;
-
 
 server.listen(PORT, () => {
   const host = process.env.HOST || "0.0.0.0"; // Use HOST if set, otherwise default
