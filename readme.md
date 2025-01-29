@@ -1,4 +1,3 @@
-````markdown
 # Collaborative Code Editor
 
 A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO**, and **PeerJS**. This project is designed to showcase skills in real-time synchronization, UI/UX development, and collaborative tooling. The project is not intended to scale to a large user base but focuses on providing core functionality for collaboration and learning.
@@ -7,19 +6,19 @@ A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO
 
 ## Features
 
-### Core Features
+## Core Features
 
 - **Real-Time Collaboration**: Multiple users can edit the same code in real time.
 - **Chat Integration**: Allows users to communicate while coding collaboratively.
 - **User Cursor Tracking**: Tracks and displays the cursor positions of other users in the editor.
 - **Code State Persistence**: Saves the code in a room so new users joining the room automatically receive the saved state.
 
-### UI/UX Improvements
+## UI/UX Improvements
 
 - **Homepage Redesign**: Improved homepage with a modern UI and a background image tailored to the theme.
 - **Dark/Dracula Theme**: Room page with a sleek and user-friendly dark theme using TailwindCSS.
 
-### Advanced Code Editor Features
+## Advanced Code Editor Features
 
 - **Code Compilation**: Compile and run supported programming languages (C, C++, JavaScript, Python).
 - **Code Utilities**: Options to:
@@ -29,7 +28,7 @@ A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO
 - **File Upload**: Upload a code file to display its contents in the editor.
 - **Cursor Tracking**: Visualize different user cursors in the editor during collaborative sessions.
 
-### Chatbot Integration
+## Chatbot Integration
 
 - **AI Chatbot**: Get coding assistance directly within the editor through an integrated AI chatbot.
 - **Chat to Chatbot Conversion**: Transform the chat feature into an interactive chatbot experience.
@@ -65,6 +64,7 @@ A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO
    git clone https://github.com/your-username/collaborative-code-editor.git
    cd collaborative-code-editor
    ```
+
 ````
 
 2. Install dependencies:
@@ -132,3 +132,4 @@ This project is licensed under the [MIT License](LICENSE).
 ```
 
 ```
+````

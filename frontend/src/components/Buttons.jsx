@@ -4,10 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PropTypes from "prop-types";
 
-const Buttons = ({ roomId }) => {
-  const [isVideoOn, setIsVideoOn] = useState(true);
-  const [isMicOn, setIsMicOn] = useState(true);
-
+const Buttons = ({ roomId, isVideoOn, setIsVideoOn, isMicOn, setIsMicOn }) => {
   const copyToClipboard = () => {
     if (roomId) {
       navigator.clipboard.writeText(roomId).then(
@@ -23,12 +20,12 @@ const Buttons = ({ roomId }) => {
           });
         },
         (err) => {
-          alert("Failed to copy Room ID.");
+          toast.error("Failed to copy Room ID.");
           console.error(err);
         }
       );
     } else {
-      alert("Room ID not available.");
+      toast.warn("Room ID not available.");
     }
   };
 

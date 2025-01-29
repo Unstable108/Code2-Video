@@ -3,7 +3,7 @@ import { useSocket } from "../context/socketContext";
 import { useParams } from "react-router-dom";
 import Peer from "peerjs";
 
-const VideoCall = ({ users }) => {
+const VideoCall = ({ users, isVideoOn, isMicOn }) => {
   const { socket } = useSocket();
   const { id: roomId } = useParams();
   const localVideoRef = useRef(null);

@@ -17,6 +17,9 @@ const Room = () => {
   const [code, setCode] = useState(""); // Shared code state
   const { socket } = useSocket();
 
+  const [isVideoOn, setIsVideoOn] = useState(true);
+  const [isMicOn, setIsMicOn] = useState(true);
+
   useEffect(() => {
     if (socket && name) {
       socket.emit("join-room", { roomId, userName: name });
@@ -67,12 +70,18 @@ const Room = () => {
         <div className="flex gap-2 mt-2">
           {/* Buttons Component */}
           <div className="flex flex-col items-center justify-start border-4 border-gray-700 p-2">
-            <Buttons roomId={roomId} />
+            <Buttons
+              roomId={roomId}
+              isVideoOn={isVideoOn}
+              setIsVideoOn={setIsVideoOn}
+              isMicOn={isMicOn}
+              setIsMicOn={setIsMicOn}
+            />
           </div>
 
           {/* Video Component */}
           <div className="flex-grow border-4 border-gray-700 p-2 overflow-auto">
-            <VideoCall users={users} />
+            <VideoCall users={users} isVideoOn={isVideoOn} isMicOn={isMicOn} />
           </div>
         </div>
       </div>
