@@ -5,6 +5,7 @@ import Room from "./pages/Room";
 import "./index.css";
 import RoomTest from "./pages/RoomTest";
 import RoomNew from "./pages/RoomNew";
+import CameraToggle from "./pages/CameraToggle";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/room/:id" element={<Room />} />
             <Route path="/roomtest" element={<RoomTest />} />
             <Route path="/newroom" element={<RoomNew />} />
+            <Route path="/Camtest" element={<CameraToggle />} />
           </Routes>
         </div>
       </Router>

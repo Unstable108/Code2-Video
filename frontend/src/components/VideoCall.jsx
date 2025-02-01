@@ -110,6 +110,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
       const videoElement = document.createElement("video");
       videoElement.srcObject = remoteStream;
       videoElement.autoplay = true;
+      videoElement.muted = true; // Ensure remote video is muted
       videoElement.className =
         "remote-video w-48 h-48 border-2 border-gray-400 rounded-lg";
 
@@ -167,6 +168,8 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
           <video
             ref={localVideoRef}
             className="w-48 h-48 border-2 border-gray-400 rounded-lg"
+            autoPlay
+            muted
           />
         </div>
       </div>
