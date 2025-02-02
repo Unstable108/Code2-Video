@@ -1,3 +1,4 @@
+//https://stackoverflow.com/questions/64012898/how-to-completely-turn-off-camera-on-mediastream-javascript
 import React, { useState, useEffect, useRef } from "react";
 
 function CameraToggle() {

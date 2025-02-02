@@ -16,7 +16,6 @@ const Chat = ({ roomId, name }) => {
       // Listen for received messages
       const handleReceiveMessage = (message) => {
         setMessages((prev) => [...prev, message]);
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); // Auto-scroll
       };
 
       socket.on("receive-message", handleReceiveMessage);
@@ -27,6 +26,11 @@ const Chat = ({ roomId, name }) => {
       };
     }
   }, [socket, roomId, name]);
+
+  useEffect(() => {
+    // Auto-scroll to the latest message when messages change
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]); // This effect will run whenever `messages` change (new message received or sent)
 
   const sendMessage = () => {
     if (newMessage.trim() && socket) {
@@ -46,10 +50,10 @@ const Chat = ({ roomId, name }) => {
   };
 
   return (
-    <div className="flex flex-col h-full p-4">
+    <div className="flex flex-col h-full w-full">
       <div
-        className="flex-1 overflow-y-auto mb-4 space-y-2 border rounded"
-        style={{ maxHeight: "300px" }} // Adjust the height as needed
+        className="flex-1 overflow-y-auto mb-4 space-y-2"
+        style={{ maxHeight: "350px", overflowY: "auto" }}
       >
         {messages.map((msg, index) => (
           <div
@@ -83,21 +87,20 @@ const Chat = ({ roomId, name }) => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <div className="flex items-center">
+
+      {/* Input and Send Button */}
+      <div className="flex items-center justify-between p-2 bg-gray-100">
         <input
           type="text"
           placeholder="Type a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyPress={(e) => handleKeyPress(e)}
-          className="flex-1 border p-2 rounded mr-2"
+          className="flex-1 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <button
           onClick={sendMessage}
-          className="bg-green-500 text-white px-4 py-2 rounded"
-          style={{
-            borderRadius: "25px",
-          }}
+          className="ml-2 bg-green-500 text-white px-4 py-2 rounded-md focus:outline-none"
         >
           Send
         </button>
@@ -105,6 +108,7 @@ const Chat = ({ roomId, name }) => {
     </div>
   );
 };
+
 Chat.propTypes = {
   roomId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
