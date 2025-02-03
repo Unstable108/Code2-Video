@@ -112,7 +112,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
       videoElement.autoplay = true;
       videoElement.muted = true; // Ensure remote video is muted
       videoElement.className =
-        "remote-video w-48 h-48 border-2 border-gray-400 rounded-lg";
+        "remote-video w-48 h-48 border-2 border-gray-400 object-cover rounded-lg";
 
       container.appendChild(videoElement);
 
@@ -167,7 +167,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
         <div className="video-container flex flex-col items-center m-2">
           <video
             ref={localVideoRef}
-            className="w-48 h-48 border-2 border-gray-400 rounded-lg"
+            className="w-48 h-48 border-2 border-gray-400 object-cover rounded-lg"
             autoPlay
             muted
           />
