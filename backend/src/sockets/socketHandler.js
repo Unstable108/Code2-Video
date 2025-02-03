@@ -15,7 +15,7 @@ module.exports = (io, socket) => {
     const room = rooms.get(roomId);
 
     // Ensure the user is not already in the room
-    if (room.users.find((user) => user.name === userName)) {
+    if (room.users.some((user) => user.name === userName)) {
       console.log(`${userName} is already in the room`);
       return; // Don't add user again
     }
@@ -29,17 +29,33 @@ module.exports = (io, socket) => {
     // Notify all users in the room about the new user
     io.to(roomId).emit("room-data", room.users);
 
-    // Send current code to the new user
+    // Send current code and compiler output to the new user
     socket.emit("update-editor", { newContent: room.code });
+    socket.emit("compiler-output", { output: room.compilerOutput || "" });
 
     //Editor: Handle editor changes
     socket.on("editor-change", ({ roomId, newContent }) => {
-      if (roomId) {
-        console.log("Broadcasting editor change to room:", roomId);
+      if (roomId && rooms.has(roomId)) {
+        console.log("Updating room code:", newContent);
+
         // Update room code in backend
         room.code = newContent;
         io.to(roomId).emit("update-editor", { newContent });
       }
+    });
+
+    // Compiler: Handle compiler status
+    socket.on("compiler-status", ({ roomId, status }) => {
+      console.log(`Compiler status in room ${roomId}: ${status}`);
+      io.to(roomId).emit("compiler-status", { status });
+    });
+
+    // Compiler: Handle compiler output
+    socket.on("compiler-output", ({ roomId, output }) => {
+      console.log(`Compiler output in room ${roomId}: ${output}`);
+      // Update room compiler output in backend
+      room.compilerOutput = output;
+      io.to(roomId).emit("compiler-output", { output });
     });
 
     // Video call: Join video session in the room

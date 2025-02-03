@@ -1,37 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useSocket } from "../context/socketContext";
 import Editor from "@monaco-editor/react";
 import { debounce } from "lodash";
 
-const CodeEditor = ({ roomId, onCodeChange }) => {
-  const [code, setCode] = useState("// Write your code here...");
+const CodeEditor = ({ code, roomId, setSharedCode }) => {
+  const [localCode, setLocalCode] = useState(code); // Initialize local code with prop
   const [language, setLanguage] = useState("javascript"); // Language state
   const { socket } = useSocket();
 
+  // Update local code when the prop changes (from other users)
   useEffect(() => {
-    if (socket) {
-      // Listen for content updates from other users
-      const handleEditorUpdate = ({ newContent }) => {
-        setCode(newContent);
-      };
+    setLocalCode(code);
+  }, [code]);
 
-      // When joining, get the initial code for the room
-      socket.on("update-editor", handleEditorUpdate);
+  const handleEditorChange = (value) => {
+    setLocalCode(value);
+    setSharedCode(value); // Set shared code immediately
+  };
 
-      return () => {
-        socket.off("update-editor", handleEditorUpdate);
-      };
-    }
-  }, [socket]);
+  const debouncedEmit = useCallback(
+    debounce((newCode) => {
+      if (socket && roomId) {
+        socket.emit("editor-change", { roomId, newContent: newCode });
+      }
+    }, 1000),
+    []
+  );
 
-  const handleEditorChange = debounce((value) => {
-    setCode(value);
-    onCodeChange(value); // Notify parent about code changes
-    if (socket && roomId) {
-      socket.emit("editor-change", { roomId, newContent: value });
-    }
-  }, 1000);
+  useEffect(() => {
+    debouncedEmit(localCode);
+  }, [localCode, debouncedEmit]);
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden">
@@ -68,7 +67,7 @@ const CodeEditor = ({ roomId, onCodeChange }) => {
           height="100%" // Takes up the remaining height in the container
           width="100%" // Takes up the full width
           language={language} // Dynamically set the language
-          value={code}
+          value={localCode}
           onChange={handleEditorChange}
           theme="vs-dark"
           options={{

@@ -50,8 +50,14 @@ router.post("/", async (req, res) => {
     res.status(200).json(response.data);
   } catch (error) {
     console.error("Compilation error:", error.message);
-    console.error("Compilation error:", error.response?.data || error.message);
-    res.status(500).json({ message: "Error while compiling code", error });
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      "Error during compilation"; // Extract error message
+    res.status(500).json({ message: errorMessage }); // Send error response
+
+    // Emit the error to the client
+    io.to(roomId).emit("compiler-output", { output: errorMessage }); // Or "compiler-status"
   }
 });
 

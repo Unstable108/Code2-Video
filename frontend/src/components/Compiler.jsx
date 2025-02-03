@@ -1,17 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { useSocket } from "../context/socketContext";
 
-const Compiler = ({ code }) => {
+const Compiler = ({ roomId, code }) => {
+  const { socket } = useSocket();
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    // Receive compiler output updates
+    socket.on("compiler-output", ({ output }) => {
+      setOutput(output);
+      setLoading(false);
+    });
+
+    // Receive compile status
+    socket.on("compiler-status", ({ status }) => {
+      setOutput(status);
+      setLoading(status === "Compiling...");
+    });
+
+    return () => {
+      socket.off("compiler-output");
+      socket.off("compiler-status");
+    };
+  }, [socket]);
+
   const handleRunCode = async () => {
+    if (!code || code.trim() === "") {
+      setOutput("Error: No code to compile.");
+      return;
+    }
+
     setLoading(true);
     setOutput("Compiling...");
+
+    // Notify others that compilation is in progress
+    socket.emit("compiler-status", { roomId, status: "Compiling..." });
+
     try {
       const { data } = await axios.post("http://localhost:5000/api/compile", {
-        source_code: code,
+        source_code: code, // Ensure the latest code is sent
         language_id: 63, // JavaScript
         stdin: "",
       });
@@ -26,6 +58,9 @@ const Compiler = ({ code }) => {
           : "No output";
         setOutput(decodedOutput);
         setLoading(false);
+
+        // Broadcast output to other users
+        socket.emit("compiler-output", { roomId, output: decodedOutput });
         return;
       }
 
@@ -44,11 +79,18 @@ const Compiler = ({ code }) => {
                 stdout || stderr ? stdout || stderr : "No output provided.";
               setOutput(decodedOutput);
               setLoading(false);
+
+              // Broadcast output to other users
+              socket.emit("compiler-output", { roomId, output: decodedOutput });
             }
           } catch (error) {
             console.error("Error fetching submission result:", error);
             setOutput("Error fetching result.");
             setLoading(false);
+            socket.emit("compiler-output", {
+              roomId,
+              output: "Error running code.",
+            });
           }
         };
 
