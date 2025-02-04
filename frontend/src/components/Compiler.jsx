@@ -42,11 +42,14 @@ const Compiler = ({ roomId, code }) => {
     socket.emit("compiler-status", { roomId, status: "Compiling..." });
 
     try {
-      const { data } = await axios.post("http://localhost:5000/api/compile", {
-        source_code: code, // Ensure the latest code is sent
-        language_id: 63, // JavaScript
-        stdin: "",
-      });
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/compile`,
+        {
+          source_code: code, // Ensure the latest code is sent
+          language_id: 63, // JavaScript
+          stdin: "",
+        }
+      );
 
       const { token, stdout, stderr } = data;
 
@@ -68,7 +71,7 @@ const Compiler = ({ roomId, code }) => {
         const getResult = async () => {
           try {
             const result = await axios.get(
-              `http://localhost:5000/api/compile/${token}`
+              `${import.meta.env.VITE_BACKEND_URL}/api/compile/${token}`
             );
             const { stdout, stderr, status } = result.data;
 

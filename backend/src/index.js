@@ -68,7 +68,7 @@ server.listen(PORT, () => {
   console.log(`Server running on ${environmentUrl}`);
 });
 
-peerServer.listen(PEER_PORT, () => {
+peerServer.listen(PEER_PORT, "0.0.0.0", () => {
   const peerUrl = `http://localhost:${PEER_PORT}`;
   console.log(`PeerJS Server running on ${peerUrl}`);
 });

@@ -32,8 +32,9 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
         // Initialize PeerJS
         if (!peerInstance.current) {
           peerInstance.current = new Peer(undefined, {
-            host: "localhost",
-            port: 5001,
+            host: process.env.REACT_APP_PEER_HOST,
+            secure: process.env.REACT_APP_PEER_SECURE === "true",
+            port: Number(process.env.REACT_APP_PEER_PORT),
             path: "/peerjs",
           });
 
