@@ -10,7 +10,10 @@ require("dotenv").config();
 const { router: roomRoutes } = require("./controllers/roomController");
 const compileRouter = require("./controllers/compilerController");
 const socketHandler = require("./sockets/socketHandler");
-const { configurePeerServer } = require("./config/peerServer");
+const {
+  configurePeerServer,
+  createPeerServer,
+} = require("./config/peerServer");
 
 const app = express();
 const server = http.createServer(app);
@@ -18,14 +21,15 @@ const server = http.createServer(app);
 // Initialize PeerJS on a separate server
 const peerApp = express();
 const peerServer = http.createServer(peerApp);
-const peerJsInstance = ExpressPeerServer(peerServer, { debug: true });
-peerApp.use("/peerjs", peerJsInstance);
+
+//Create the PeerJS instance and configure it
+const peerJsInstance = createPeerServer(peerApp, peerServer);
 configurePeerServer(peerJsInstance);
 
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // Frontend URL
+    origin: process.env.FRONTEND_URL, // Frontend URL
     credentials: true,
   })
 );
@@ -40,7 +44,7 @@ app.use("/api/compile", compileRouter);
 const io = new Server(server, {
   allowEIO3: true,
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   },
 });

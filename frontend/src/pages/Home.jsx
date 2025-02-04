@@ -16,7 +16,7 @@ const Home = () => {
     if (name.trim()) {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/rooms/create"
+          `${import.meta.env.VITE_BACKEND_URL}/api/rooms/create`
         );
         const newRoomId = response.data.roomId;
         navigate(`/room/${newRoomId}`, { state: { name, isHost: true } });
@@ -34,7 +34,7 @@ const Home = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/rooms/${roomId}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/rooms/${roomId}`
         );
         if (response.status === 200) {
           navigate(`/room/${roomId}`, { state: { name, isHost: false } });

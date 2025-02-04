@@ -9,7 +9,7 @@ let socket;
 export const SocketProvider = ({ children }) => {
   if (!socket) {
     console.log("Creating a new socket connection...");
-    socket = io("http://localhost:5000", { withCredentials: true });
+    socket = io(import.meta.env.VITE_BACKEND_URL, { withCredentials: true });
   }
 
   return (
