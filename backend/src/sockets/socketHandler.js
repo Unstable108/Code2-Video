@@ -1,8 +1,6 @@
 const { rooms } = require("../controllers/roomController");
 
 module.exports = (io, socket) => {
-  console.log(`Socket connected: ${socket.id}`);
-
   // Join a room
   socket.on("join-room", ({ roomId, userName }) => {
     if (!rooms.has(roomId)) {
@@ -36,8 +34,6 @@ module.exports = (io, socket) => {
     //Editor: Handle editor changes
     socket.on("editor-change", ({ roomId, newContent }) => {
       if (roomId && rooms.has(roomId)) {
-        console.log("Updating room code:", newContent);
-
         // Update room code in backend
         room.code = newContent;
         io.to(roomId).emit("update-editor", { newContent });

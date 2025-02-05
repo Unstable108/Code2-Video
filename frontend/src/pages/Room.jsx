@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { debounce } from "lodash";
 import CodeEditor from "../components/CodeEditor";
 import Compiler from "../components/Compiler";
 import VideoCall from "../components/VideoCall";

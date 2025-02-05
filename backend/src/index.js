@@ -2,7 +2,6 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-const { ExpressPeerServer } = require("peer");
 const path = require("path");
 require("dotenv").config();
 
@@ -57,18 +56,26 @@ io.on("connection", (socket) => {
   });
 });
 
-// Start the servers
-const PORT = process.env.PORT || 5000;
-const PEER_PORT = process.env.PEER_PORT || 5001;
+// Determine environment (local vs production)
+const isProduction = process.env.NODE_ENV === "production";
 
-server.listen(PORT, () => {
-  const host = process.env.HOST || "0.0.0.0"; // Use HOST if set, otherwise default
+// Server Configuration
+const PORT = process.env.PORT || 5000;
+const PEER_PORT = process.env.PEER_PORT || (isProduction ? 443 : 5001);
+const HOST = process.env.HOST || "0.0.0.0";
+
+// Start the Express server
+server.listen(PORT, HOST, () => {
   const environmentUrl =
     process.env.RAILWAY_STATIC_URL || `http://localhost:${PORT}`;
   console.log(`Server running on ${environmentUrl}`);
 });
 
-peerServer.listen(PEER_PORT, "0.0.0.0", () => {
-  const peerUrl = `http://localhost:${PEER_PORT}`;
-  console.log(`PeerJS Server running on ${peerUrl}`);
+// Start the PeerJS server
+peerServer.listen(PEER_PORT, HOST, () => {
+  console.log(
+    `PeerJS Server running on ${
+      isProduction ? "HTTPS" : "HTTP"
+    }://${HOST}:${PEER_PORT}`
+  );
 });

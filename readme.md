@@ -60,12 +60,11 @@ A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO
 ### Steps
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-username/collaborative-code-editor.git
    cd collaborative-code-editor
    ```
-
-````
 
 2. Install dependencies:
 
@@ -76,7 +75,7 @@ A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO
 3. Start the server:
 
    ```bash
-   npm run start
+   npm run dev
    ```
 
 4. Open the application in your browser:
@@ -98,15 +97,43 @@ A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO
 
 ---
 
-## Roadmap
+### .env for backend
 
-### Planned Improvements
+## Backend (local Development)
 
-- Implementing conflict resolution using OT/CRDT.
-- Adding more themes for the code editor.
-- Enhancing the AI chatbot for more contextual coding assistance.
-- Supporting additional programming languages.
-- Deployment on platforms like **Vercel** or **AWS**.
+- JUDGE0_API_KEY=\_\_\_API_CODE
+- NODE_ENV=development
+- PORT=5000
+- PEER_PORT=5001
+- HOST=0.0.0.0
+- FRONTEND_URL=http://localhost:5173
+
+## Backend (Production) -Railway
+
+- JUDGE0_API_KEY=\_\_\_API_CODE
+- NODE_ENV=production
+- PORT=5000
+- PEER_PORT=443 # Secure WebRTC requires 443
+- HOST=0.0.0.0
+- FRONTEND_URL=https://your-frontend-url.vercel.app
+
+---
+
+### .env for frontend
+
+## frontend (local development)
+
+- VITE_BACKEND_URL=http://localhost:5000
+- VITE_PEER_HOST=localhost
+- VITE_PEER_PORT=5001
+- VITE_PEER_SECURE=false
+
+## frontend (Production) -Vercel
+
+- VITE_BACKEND_URL=https://backend_URL.app
+- VITE_PEER_HOST=backend_url.railway.app
+- VITE_PEER_PORT=443
+- VITE_PEER_SECURE=true
 
 ---
 
@@ -132,4 +159,7 @@ This project is licensed under the [MIT License](LICENSE).
 ```
 
 ```
-````
+
+```
+
+```
