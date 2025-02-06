@@ -36,16 +36,17 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
             host: import.meta.env.VITE_PEER_HOST,
             secure: import.meta.env.VITE_PEER_SECURE === "true",
             port: Number(import.meta.env.VITE_PEER_PORT),
-
-            path: "/peerjs",
+            path: "/",
           });
 
           peerInstance.current.on("open", (peerId) => {
+            console.log("PeerJS connected:", peerId); // Debugging log
             socket.emit("join-video", { roomId, peerId });
           });
 
           // Handle incoming calls
           peerInstance.current.on("call", (call) => {
+            console.log("Incoming call from:", call.peer); // Debugging log
             call.answer(localStream);
             call.on("stream", (remoteStream) => {
               addRemoteStream(call.peer, remoteStream);
@@ -59,6 +60,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
 
         // Listen for new peers
         socket.on("new-peer", ({ peerId, userName }) => {
+          console.log("New peer joined:", peerId); // Debugging log
           if (peers.current[peerId]) return; // Avoid duplicate calls
           userNames.current[peerId] = userName;
           const call = peerInstance.current.call(peerId, localStream);
@@ -75,6 +77,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
 
         // Handle existing peers
         socket.on("existing-peers", ({ existingPeers }) => {
+          console.log("Existing peers:", existingPeers); // Debugging log
           existingPeers.forEach(({ peerId, userName }) => {
             if (peers.current[peerId]) return;
             userNames.current[peerId] = userName;
@@ -93,6 +96,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
 
         // Handle peer disconnection
         socket.on("peer-disconnected", ({ peerId }) => {
+          console.log("Peer disconnected:", peerId); // Debugging log
           removeRemoteStream(peerId);
         });
       } catch (error) {
@@ -102,7 +106,10 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
 
     const cleanup = () => {
       // Close all active peer connections
-      Object.values(peers.current).forEach((call) => call.close());
+      Object.values(peers.current).forEach((call) => {
+        call.close();
+        console.log("Closed call to:", call.peer); // Debugging log
+      });
       peers.current = {};
 
       // Clear remote videos
@@ -162,6 +169,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
     container.appendChild(videoElement);
 
     remoteVideosRef.current.appendChild(container);
+    console.log(`Added remote stream for peer ${peerId}`); // Debugging log
   }, []);
 
   const removeRemoteStream = useCallback((peerId) => {
@@ -173,6 +181,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
     }
     delete peers.current[peerId];
     delete userNames.current[peerId];
+    console.log(`Removed remote stream for peer ${peerId}`); // Debugging log
   }, []);
 
   return (
