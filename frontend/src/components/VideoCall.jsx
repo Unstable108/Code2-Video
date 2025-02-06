@@ -36,7 +36,7 @@ const VideoCall = ({ users, isVideoOn, isMicOn }) => {
             host: import.meta.env.VITE_PEER_HOST,
             secure: import.meta.env.VITE_PEER_SECURE === "true",
             port: Number(import.meta.env.VITE_PEER_PORT),
-            path: "/",
+            path: "/peerjs",
           });
 
           peerInstance.current.on("open", (peerId) => {

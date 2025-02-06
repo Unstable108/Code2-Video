@@ -101,21 +101,25 @@ A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO
 
 ## Backend (local Development)
 
-- JUDGE0_API_KEY=\_\_\_API_CODE
-- NODE_ENV=development
-- PORT=5000
-- PEER_PORT=5001
-- HOST=0.0.0.0
-- FRONTEND_URL=http://localhost:5173
+```
+ JUDGE0_API_KEY=\_\_\_API_CODE
+ NODE_ENV=development
+ PORT=5000
+ PEER_PORT=5001
+ HOST=0.0.0.0
+ FRONTEND_URL=http://localhost:5173
+```
 
 ## Backend (Production) -Railway
 
-- JUDGE0_API_KEY=\_\_\_API_CODE
-- NODE_ENV=production
-- PORT=5000
-- PEER_PORT=443 # Secure WebRTC requires 443
-- HOST=0.0.0.0
-- FRONTEND_URL=https://your-frontend-url.vercel.app
+```
+ JUDGE0_API_KEY=\_\_\_API_CODE
+ NODE_ENV=production
+ PORT=5000
+ PEER_PORT=443 # Secure WebRTC requires 443
+ HOST=0.0.0.0
+ FRONTEND_URL=https://your-frontend-url.vercel.app
+```
 
 ---
 
@@ -123,17 +127,21 @@ A real-time collaborative code editor built using **Monaco Editor**, **Socket.IO
 
 ## frontend (local development)
 
-- VITE_BACKEND_URL=http://localhost:5000
-- VITE_PEER_HOST=localhost
-- VITE_PEER_PORT=5001
-- VITE_PEER_SECURE=false
+```
+ VITE_BACKEND_URL=http://localhost:5000
+ VITE_PEER_HOST=localhost
+ VITE_PEER_PORT=5001
+ VITE_PEER_SECURE=false
+```
 
 ## frontend (Production) -Vercel
 
-- VITE_BACKEND_URL=https://backend_URL.app
-- VITE_PEER_HOST=backend_url.railway.app
-- VITE_PEER_PORT=443
-- VITE_PEER_SECURE=true
+```
+ VITE_BACKEND_URL=https://backend_URL.app
+ VITE_PEER_HOST=backend_url.railway.app
+ VITE_PEER_PORT=443
+ VITE_PEER_SECURE=true
+```
 
 ---
 
@@ -155,11 +163,3 @@ This project is licensed under the [MIT License](LICENSE).
 - **Socket.IO** for real-time communication.
 - **TailwindCSS** for rapid UI development.
 - AI services for chatbot integration.
-
-```
-
-```
-
-```
-
-```
