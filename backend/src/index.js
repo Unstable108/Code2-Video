@@ -39,6 +39,12 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use("/api/rooms", roomRoutes);
 app.use("/api/compile", compileRouter);
 
+app.get("/",(req,res)=>{
+  res.json({
+    message: "Welcome to the Collaborative Coding Platform API"
+  });
+})
+
 // Initialize Socket.io
 const io = new Server(server, {
   allowEIO3: true,
